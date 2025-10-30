@@ -25,3 +25,36 @@ Project layout (initial)
 - mt5/: placeholder for MQL5 Expert Advisor (EA) later
 
 This scaffold intentionally contains no business logic. Add concrete implementations in future sprints.
+
+## 🔐 CI Setup — Secrets
+
+The CI workflow `test_audit_verification.yml` verifies the integrity of the append-only `audit.log` by checking HMAC-SHA256 signatures. For the workflow to pass you must provide the secret key used to sign/verify audit entries.
+
+How to set the secret on GitHub (web UI):
+
+1. Go to your repository on GitHub: https://github.com/codexia87-glitch/qai-trader
+2. Settings → Secrets and variables → Actions → New repository secret
+3. Name: `QAI_HMAC_KEY`
+4. Value: (your HMAC secret string, e.g. a long random token)
+5. Save secret.
+
+Or using GitHub CLI:
+
+1. Install `gh` and authenticate: `gh auth login`
+2. Run:
+
+   gh secret set QAI_HMAC_KEY --body "$(openssl rand -hex 32)"
+
+Security notes:
+- Use a strong random value (example above uses `openssl rand -hex 32`).
+- Store the key only in GitHub Secrets (not in the repo). The workflow reads `QAI_HMAC_KEY` from secrets at runtime.
+- If you rotate the key, re-sign any existing audit entries or note the rotation in your audit trail.
+
+Quick local test (optional):
+
+```bash
+export QAI_HMAC_KEY="your-test-key"
+python3 -m pytest -q tests/test_audit_verification.py
+```
+
+After adding the secret, push your changes and the workflow will run on the next push or pull request. If the audit signatures are valid the job will exit successfully; otherwise it will fail and report which lines (if `--verbose`) are invalid.
