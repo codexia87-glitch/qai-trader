@@ -1,0 +1,9 @@
+pytest>=7.0
+# Minimal runtime / dev dependencies for Sprint 0
+pytest>=7.0
+# Optional dependency for live MetaTrader5 integration
+# Install only when you intend to run live trades
+MetaTrader5>=5.0
+# Optional ML dependency (install when you want PyTorch features)
+# PyTorch installation varies by platform — follow https://pytorch.org/
+# torch

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "project": "qai-trader",
+  "sprint": null,
+  "completed_tasks": [],
+  "last_commit": null,
+  "modified_files": [],
+  "last_script": "scripts/run_mt5_client.py",
+  "last_args": {
+    "live": true,
+    "folder": "example_signals"
+  },
+  "last_run_ts": "2025-10-30T00:00:00Z",
+  "checkpoints": [
+    {
+      "path": "tests/dummy.ckpt",
+      "type": "test",
+      "meta": {
+        "note": "smoke"
+      },
+      "ts": "2025-10-30T04:00:10.345924Z"
+    },
+    {
+      "path": "/Users/soybillonario/Desktop/PROYECTOS PYTHON/IA FOREX/qai-trader/example_signals_test/EURUSD_BUY_20251030T040241Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-10-30T04:02:41.506865Z"
+    }
+  ],
+  "notes": null
+}

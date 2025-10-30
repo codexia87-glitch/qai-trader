@@ -1,0 +1,12 @@
+# Minimal configuration placeholder for qai-trader
+# Add project-specific settings here as they are defined.
+app:
+  name: qai-trader
+  env: development
+logging:
+  level: INFO
+# MT5 bridge settings (placeholders)
+mt5:
+  enabled: false
+  account: null
+  server: null
