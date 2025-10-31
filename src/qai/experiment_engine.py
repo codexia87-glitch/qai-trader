@@ -15,6 +15,7 @@ from .logging_utils import append_signed_audit
 
 if TYPE_CHECKING:  # pragma: no cover
     from .visualizer_advanced import AdvancedMultiSessionVisualizer
+    from .integrations_ci import CIIntegrationManager
 
 
 class ExperimentEngine:
@@ -29,6 +30,7 @@ class ExperimentEngine:
         visualizer: Optional[MultiSessionVisualizer] = None,
         dashboard: Optional[MultiSessionDashboard] = None,
         visualizer_advanced: Optional["AdvancedMultiSessionVisualizer"] = None,
+        ci_manager: Optional["CIIntegrationManager"] = None,
     ) -> None:
         self.pipeline = pipeline or EvaluationPipeline()
         self.datastore = datastore
@@ -37,6 +39,7 @@ class ExperimentEngine:
         self.visualizer = visualizer or MultiSessionVisualizer(output_dir=self.output_dir / "visuals")
         self.dashboard = dashboard or MultiSessionDashboard(output_dir=self.output_dir / "dashboards")
         self.visualizer_advanced = visualizer_advanced
+        self.ci_manager = ci_manager
 
     def run_batch(
         self,
@@ -71,6 +74,7 @@ class ExperimentEngine:
                 visualizer=self.visualizer,
                 dashboard=self.dashboard,
                 visualizer_advanced=self.visualizer_advanced,
+                ci_manager=self.ci_manager,
                 return_result=True,
             )
 
@@ -119,6 +123,13 @@ class ExperimentEngine:
                 },
                 audit_log=audit_log,
                 hmac_key=hmac_key,
+            )
+
+        if self.ci_manager is not None:
+            self.ci_manager.validate_pipeline(
+                "experiment-summary",
+                artifacts=[summary_path, csv_path],
+                notes="Experiment batch completed",
             )
 
         if self.visualizer_advanced is not None and advanced_sessions:

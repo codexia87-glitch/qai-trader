@@ -32,6 +32,12 @@ This scaffold intentionally contains no business logic. Add concrete implementat
 - The evaluation pipeline and experiment engine accept the advanced visualizer for side-by-side comparisons with signed audit events (`qai.visualizer3d/*`).
 - Generated dashboards export HTML/JSON/PNG assets suitable for release auditing and artifact sharing.
 
+## 🔗 Integración con CI/CD externo
+
+- `CIIntegrationManager` (`src/qai/integrations_ci.py`) detecta entornos GitHub Actions, GitLab o Jenkins para activar validaciones automáticas.
+- Los pipelines pueden exportar y recuperar artefactos (CSV/Parquet/S3) reutilizando `IntegrationsManager`, con auditoría firmada (`qai.ci/*`).
+- `DeployValidator` y `EvaluationPipeline` pueden registrar hooks de validación y finalización tras pruebas o despliegues canary.
+
 ## 🚀 Roadmap v0.2.0 — Predictive Backtesting Phase
 
 - Backtesting datastore (`src/qai/datastore.py`) storing run artefacts under `var/backtests/`.

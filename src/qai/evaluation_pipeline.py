@@ -18,6 +18,7 @@ from .security_validator import SecurityValidator
 
 if TYPE_CHECKING:  # pragma: no cover
     from .visualizer_advanced import AdvancedMultiSessionVisualizer
+    from .integrations_ci import CIIntegrationManager
 
 
 class EvaluationPipeline:
@@ -46,6 +47,7 @@ class EvaluationPipeline:
         visualizer: Optional[MultiSessionVisualizer] = None,
         visualizer_advanced: Optional["AdvancedMultiSessionVisualizer"] = None,
         dashboard: Optional[MultiSessionDashboard] = None,
+        ci_manager: Optional["CIIntegrationManager"] = None,
         return_result: bool = False,
         security_validator: Optional[SecurityValidator] = None,
     ) -> Union[Dict[str, Dict[str, float]], Tuple[Dict[str, Dict[str, float]], BacktestResult]]:
@@ -160,6 +162,13 @@ class EvaluationPipeline:
                 audit_log=audit_log,
                 hmac_key=hmac_key,
                 title="Evaluation Multi-Session 3D Dashboard",
+            )
+
+        if ci_manager is not None:
+            ci_manager.validate_pipeline(
+                "post-evaluation",
+                artifacts=[report_path, csv_path],
+                notes=f"Evaluation pipeline completed for session {session_id or 'evaluation'}",
             )
 
         if return_result:

@@ -6,9 +6,12 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Union
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Union, TYPE_CHECKING
 
 from .logging_utils import append_signed_audit
+
+if TYPE_CHECKING:  # pragma: no cover
+    from .integrations_ci import CIIntegrationManager
 
 REQUIRED_CHECKS: Sequence[str] = ("ci",)
 
@@ -50,11 +53,13 @@ class DeployValidator:
         session_id: Optional[str] = None,
         hmac_key: Optional[str] = None,
         required_checks: Sequence[str] = REQUIRED_CHECKS,
+        ci_manager: Optional["CIIntegrationManager"] = None,
     ) -> None:
         self.audit_log = audit_log
         self.session_id = session_id
         self.hmac_key = hmac_key
         self.required_checks = tuple(required_checks)
+        self.ci_manager = ci_manager
 
     # ------------------------------------------------------------------
     # Public API
@@ -74,6 +79,7 @@ class DeployValidator:
         issues: List[ValidationIssue] = []
         rollback: List[str] = []
 
+        artifact_paths: List[Path] = []
         for item in artifacts:
             name = str(item.get("name") or item.get("path") or "unknown")
             path_value = item.get("path")
@@ -89,6 +95,7 @@ class DeployValidator:
                 continue
 
             checked.append(name)
+            artifact_paths.append(path)
 
             expected_checksum = item.get("checksum")
             if expected_checksum:
@@ -119,6 +126,13 @@ class DeployValidator:
                     )
                 rollback.append(name)
 
+        if self.ci_manager is not None:
+            self.ci_manager.validate_pipeline(
+                "pre-deploy",
+                artifacts=artifact_paths,
+                notes=f"Validating manifest for release {release}",
+            )
+
         passed = not issues
         report = ValidationReport(
             release=release,
@@ -131,8 +145,37 @@ class DeployValidator:
 
         if passed:
             self._audit_success(report, manifest_dict)
+            if self.ci_manager is not None:
+                self.ci_manager.validate_pipeline(
+                    "post-deploy",
+                    artifacts=artifact_paths,
+                    notes="Deployment validation succeeded",
+                )
+                self.ci_manager.complete_pipeline(
+                    "passed",
+                    details={
+                        "release": report.release,
+                        "artifact_count": len(report.checked_artifacts),
+                    },
+                )
         elif raise_on_failure:
+            if self.ci_manager is not None:
+                self.ci_manager.complete_pipeline(
+                    "failed",
+                    details={
+                        "release": report.release,
+                        "issues": [issue.message for issue in report.issues],
+                    },
+                )
             report.raise_on_failure()
+        elif self.ci_manager is not None:
+            self.ci_manager.complete_pipeline(
+                "failed",
+                details={
+                    "release": report.release,
+                    "issues": [issue.message for issue in report.issues],
+                },
+            )
 
         return report
 
@@ -203,6 +246,7 @@ def validate_artifacts(
     session_id: Optional[str] = None,
     hmac_key: Optional[str] = None,
     required_checks: Sequence[str] = REQUIRED_CHECKS,
+    ci_manager: Optional["CIIntegrationManager"] = None,
 ) -> ValidationReport:
     """Convenience wrapper around DeployValidator.validate."""
     validator = DeployValidator(
@@ -210,5 +254,6 @@ def validate_artifacts(
         session_id=session_id,
         hmac_key=hmac_key,
         required_checks=required_checks,
+        ci_manager=ci_manager,
     )
     return validator.validate(manifest)
