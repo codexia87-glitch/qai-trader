@@ -10,6 +10,7 @@ from typing import Dict, Iterable, List, Optional
 from .datastore import BacktestDatastore
 from .evaluation_pipeline import EvaluationPipeline
 from .visualizer import MultiSessionVisualizer
+from .dashboard import MultiSessionDashboard
 from .logging_utils import append_signed_audit
 
 
@@ -23,12 +24,14 @@ class ExperimentEngine:
         output_dir: Optional[Path] = None,
         datastore: Optional[BacktestDatastore] = None,
         visualizer: Optional[MultiSessionVisualizer] = None,
+        dashboard: Optional[MultiSessionDashboard] = None,
     ) -> None:
         self.pipeline = pipeline or EvaluationPipeline()
         self.datastore = datastore
         self.output_dir = Path(output_dir or "experiments")
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.visualizer = visualizer or MultiSessionVisualizer(output_dir=self.output_dir / "visuals")
+        self.dashboard = dashboard or MultiSessionDashboard(output_dir=self.output_dir / "dashboards")
 
     def run_batch(
         self,
@@ -60,6 +63,7 @@ class ExperimentEngine:
                 audit_log=audit_log,
                 hmac_key=hmac_key,
                 visualizer=self.visualizer,
+                dashboard=self.dashboard,
                 return_result=True,
             )
 

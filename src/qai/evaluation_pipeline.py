@@ -11,6 +11,7 @@ from .adaptive_strategy import AdaptiveStrategy
 from .backtester import Backtester, BacktestResult
 from .metrics_adaptive import AdaptiveMetrics
 from .visualizer import MultiSessionVisualizer
+from .dashboard import MultiSessionDashboard
 from .model_predictor import ModelPredictor
 from .logging_utils import append_signed_audit
 from .security_validator import SecurityValidator
@@ -40,6 +41,7 @@ class EvaluationPipeline:
         audit_log: Optional[Path] = None,
         hmac_key: Optional[str] = None,
         visualizer: Optional[MultiSessionVisualizer] = None,
+        dashboard: Optional[MultiSessionDashboard] = None,
         return_result: bool = False,
         security_validator: Optional[SecurityValidator] = None,
     ) -> Union[Dict[str, Dict[str, float]], Tuple[Dict[str, Dict[str, float]], BacktestResult]]:
@@ -119,6 +121,20 @@ class EvaluationPipeline:
                         "session_id": session_id or "evaluation",
                         "equity_curve": result.equity_curve,
                         "metrics": report["adaptive"],
+                    }
+                ],
+                session_id=session_id,
+                audit_log=audit_log,
+                hmac_key=hmac_key,
+            )
+
+        if dashboard is not None:
+            dashboard.render(
+                [
+                    {
+                        "session_id": session_id or "evaluation",
+                        "equity_curve": result.equity_curve,
+                        "metrics": report,
                     }
                 ],
                 session_id=session_id,
