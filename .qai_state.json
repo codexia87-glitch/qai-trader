@@ -148,6 +148,12 @@
       "status": "completed",
       "timestamp": "2025-10-31T16:32:08Z",
       "branch": "dev/v0.5.0"
+    },
+    {
+      "task": "Iniciar planificación de v0.6.0 (Optimización continua + visualización 3D + CI/CD + validación distribuida)",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T16:52:25Z",
+      "branch": "main"
     }
   ],
   "last_commit": null,
