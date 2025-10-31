@@ -10,6 +10,7 @@ from typing import Dict, Iterable, Optional, Sequence, Tuple
 from .adaptive_strategy import AdaptiveStrategy
 from .backtester import Backtester
 from .metrics_adaptive import AdaptiveMetrics
+from .visualizer import MultiSessionVisualizer
 from .model_predictor import ModelPredictor
 from .logging_utils import append_signed_audit
 
@@ -37,6 +38,7 @@ class EvaluationPipeline:
         session_id: Optional[str] = None,
         audit_log: Optional[Path] = None,
         hmac_key: Optional[str] = None,
+        visualizer: Optional[MultiSessionVisualizer] = None,
     ) -> Dict[str, Dict[str, float]]:
         output_dir = Path(output_dir or Path("reports"))
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -92,6 +94,20 @@ class EvaluationPipeline:
                 },
                 audit_log=audit_log,
                 session_id=session_id,
+                hmac_key=hmac_key,
+            )
+
+        if visualizer is not None:
+            visualizer.render(
+                [
+                    {
+                        "session_id": session_id or "evaluation",
+                        "equity_curve": result.equity_curve,
+                        "metrics": report["adaptive"],
+                    }
+                ],
+                session_id=session_id,
+                audit_log=audit_log,
                 hmac_key=hmac_key,
             )
 

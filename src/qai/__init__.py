@@ -17,6 +17,7 @@ __all__ = [
     "AdaptiveKPIs",
     "EvaluationPipeline",
     "OptimizerRL",
+    "MultiSessionVisualizer",
     "ThresholdCrossStrategy",
 ]
 
@@ -32,5 +33,6 @@ try:
     from .metrics_adaptive import AdaptiveMetrics, AdaptiveKPIs
     from .evaluation_pipeline import EvaluationPipeline
     from .optimizer import OptimizerRL
+    from .visualizer import MultiSessionVisualizer
 except ImportError:  # pragma: no cover - modules may not be ready during stub generation
-    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = None  # type: ignore
+    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = MultiSessionVisualizer = None  # type: ignore

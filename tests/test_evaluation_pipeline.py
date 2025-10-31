@@ -3,6 +3,7 @@ from pathlib import Path
 
 from src.qai.adaptive_strategy import AdaptiveStrategy
 from src.qai.evaluation_pipeline import EvaluationPipeline
+from src.qai.visualizer import MultiSessionVisualizer
 from src.qai.model_predictor import ModelPredictor
 
 HMAC_KEY = "unit-hmac-key"
@@ -27,6 +28,8 @@ def test_evaluation_pipeline_generates_reports(tmp_path: Path):
     audit_path = tmp_path / "audit.log"
     reports_dir = tmp_path / "reports"
 
+    visualizer = MultiSessionVisualizer(output_dir=reports_dir)
+
     report = pipeline.evaluate(
         strategy=AdaptiveStrategy(),
         features=features,
@@ -36,6 +39,7 @@ def test_evaluation_pipeline_generates_reports(tmp_path: Path):
         session_id="pipeline-test",
         audit_log=audit_path,
         hmac_key=HMAC_KEY,
+        visualizer=visualizer,
     )
 
     report_file = reports_dir / "pipeline-test_report.json"
@@ -54,3 +58,6 @@ def test_evaluation_pipeline_generates_reports(tmp_path: Path):
     assert last_event["module"] == "qai.pipeline"
     assert last_event["report"]["scoring"]["accuracy"] == report["scoring"]["accuracy"]
     assert isinstance(last_event.get("hmac"), str)
+
+    viz_events = [entry for entry in log_entries if entry.get("event") == "render_complete"]
+    assert viz_events
