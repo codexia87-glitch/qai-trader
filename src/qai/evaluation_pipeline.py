@@ -19,6 +19,7 @@ from .security_validator import SecurityValidator
 if TYPE_CHECKING:  # pragma: no cover
     from .visualizer_advanced import AdvancedMultiSessionVisualizer
     from .integrations_ci import CIIntegrationManager
+    from .distributed_validator import DistributedValidator
 
 
 class EvaluationPipeline:
@@ -48,6 +49,8 @@ class EvaluationPipeline:
         visualizer_advanced: Optional["AdvancedMultiSessionVisualizer"] = None,
         dashboard: Optional[MultiSessionDashboard] = None,
         ci_manager: Optional["CIIntegrationManager"] = None,
+        distributed_validator: Optional["DistributedValidator"] = None,
+        distributed_inputs: Optional[Sequence[Dict[str, Any]]] = None,
         return_result: bool = False,
         security_validator: Optional[SecurityValidator] = None,
     ) -> Union[Dict[str, Dict[str, float]], Tuple[Dict[str, Dict[str, float]], BacktestResult]]:
@@ -170,6 +173,10 @@ class EvaluationPipeline:
                 artifacts=[report_path, csv_path],
                 notes=f"Evaluation pipeline completed for session {session_id or 'evaluation'}",
             )
+
+        if distributed_validator is not None and distributed_inputs:
+            distributed_validator.run_validation_batch(distributed_inputs)
+            distributed_validator.consolidate_results()
 
         if return_result:
             return report, result

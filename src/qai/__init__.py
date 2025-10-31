@@ -23,6 +23,8 @@ __all__ = [
     "ExperimentEngine",
     "IntegrationsManager",
     "CIIntegrationManager",
+    "DistributedValidator",
+    "RedundancyChecker",
     "RLContinuousAgent",
     "ThresholdCrossStrategy",
 ]
@@ -45,6 +47,7 @@ try:
     from .experiment_engine import ExperimentEngine
     from .integrations import IntegrationsManager
     from .integrations_ci import CIIntegrationManager
+    from .distributed_validator import DistributedValidator, RedundancyChecker
     from .rl_continuous import RLContinuousAgent
 except ImportError:  # pragma: no cover - modules may not be ready during stub generation
-    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = RLAdaptiveOptimizer = AdvancedMultiSessionVisualizer = MultiSessionVisualizer = ExperimentEngine = IntegrationsManager = CIIntegrationManager = RLContinuousAgent = None  # type: ignore
+    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = RLAdaptiveOptimizer = AdvancedMultiSessionVisualizer = MultiSessionVisualizer = ExperimentEngine = IntegrationsManager = CIIntegrationManager = DistributedValidator = RedundancyChecker = RLContinuousAgent = None  # type: ignore

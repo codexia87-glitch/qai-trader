@@ -12,6 +12,7 @@ from .logging_utils import append_signed_audit
 
 if TYPE_CHECKING:  # pragma: no cover
     from .integrations_ci import CIIntegrationManager
+    from .distributed_validator import DistributedValidator
 
 REQUIRED_CHECKS: Sequence[str] = ("ci",)
 
@@ -54,12 +55,14 @@ class DeployValidator:
         hmac_key: Optional[str] = None,
         required_checks: Sequence[str] = REQUIRED_CHECKS,
         ci_manager: Optional["CIIntegrationManager"] = None,
+        distributed_validator: Optional["DistributedValidator"] = None,
     ) -> None:
         self.audit_log = audit_log
         self.session_id = session_id
         self.hmac_key = hmac_key
         self.required_checks = tuple(required_checks)
         self.ci_manager = ci_manager
+        self.distributed_validator = distributed_validator
 
     # ------------------------------------------------------------------
     # Public API
@@ -69,6 +72,7 @@ class DeployValidator:
         manifest: Union[Dict[str, Any], Path],
         *,
         raise_on_failure: bool = False,
+        distributed_inputs: Optional[Sequence[Dict[str, Any]]] = None,
     ) -> ValidationReport:
         manifest_dict, manifest_path = self._load_manifest(manifest)
 
@@ -158,6 +162,9 @@ class DeployValidator:
                         "artifact_count": len(report.checked_artifacts),
                     },
                 )
+            if self.distributed_validator is not None and distributed_inputs:
+                self.distributed_validator.run_validation_batch(distributed_inputs)
+                self.distributed_validator.consolidate_results()
         elif raise_on_failure:
             if self.ci_manager is not None:
                 self.ci_manager.complete_pipeline(
@@ -247,6 +254,8 @@ def validate_artifacts(
     hmac_key: Optional[str] = None,
     required_checks: Sequence[str] = REQUIRED_CHECKS,
     ci_manager: Optional["CIIntegrationManager"] = None,
+    distributed_validator: Optional["DistributedValidator"] = None,
+    distributed_inputs: Optional[Sequence[Dict[str, Any]]] = None,
 ) -> ValidationReport:
     """Convenience wrapper around DeployValidator.validate."""
     validator = DeployValidator(
@@ -255,5 +264,6 @@ def validate_artifacts(
         hmac_key=hmac_key,
         required_checks=required_checks,
         ci_manager=ci_manager,
+        distributed_validator=distributed_validator,
     )
-    return validator.validate(manifest)
+    return validator.validate(manifest, distributed_inputs=distributed_inputs)

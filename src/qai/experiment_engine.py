@@ -16,6 +16,7 @@ from .logging_utils import append_signed_audit
 if TYPE_CHECKING:  # pragma: no cover
     from .visualizer_advanced import AdvancedMultiSessionVisualizer
     from .integrations_ci import CIIntegrationManager
+    from .distributed_validator import DistributedValidator
 
 
 class ExperimentEngine:
@@ -31,6 +32,7 @@ class ExperimentEngine:
         dashboard: Optional[MultiSessionDashboard] = None,
         visualizer_advanced: Optional["AdvancedMultiSessionVisualizer"] = None,
         ci_manager: Optional["CIIntegrationManager"] = None,
+        distributed_validator: Optional["DistributedValidator"] = None,
     ) -> None:
         self.pipeline = pipeline or EvaluationPipeline()
         self.datastore = datastore
@@ -40,6 +42,7 @@ class ExperimentEngine:
         self.dashboard = dashboard or MultiSessionDashboard(output_dir=self.output_dir / "dashboards")
         self.visualizer_advanced = visualizer_advanced
         self.ci_manager = ci_manager
+        self.distributed_validator = distributed_validator
 
     def run_batch(
         self,
@@ -75,6 +78,8 @@ class ExperimentEngine:
                 dashboard=self.dashboard,
                 visualizer_advanced=self.visualizer_advanced,
                 ci_manager=self.ci_manager,
+                distributed_validator=self.distributed_validator,
+                distributed_inputs=scenario.get("distributed_inputs"),
                 return_result=True,
             )
 

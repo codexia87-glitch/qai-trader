@@ -38,6 +38,12 @@ This scaffold intentionally contains no business logic. Add concrete implementat
 - Los pipelines pueden exportar y recuperar artefactos (CSV/Parquet/S3) reutilizando `IntegrationsManager`, con auditoría firmada (`qai.ci/*`).
 - `DeployValidator` y `EvaluationPipeline` pueden registrar hooks de validación y finalización tras pruebas o despliegues canary.
 
+## 🛡️ Validación distribuida y redundancia
+
+- `DistributedValidator` y `RedundancyChecker` (`src/qai/distributed_validator.py`) permiten ejecutar verificaciones concurrentes en múltiples nodos con comparaciones de hashes.
+- Se registran eventos firmados (`qai.distributed/*`) para cada nodo y para el resumen consolidado, asegurando integridad criptográfica.
+- `DeployValidator` y `EvaluationPipeline` pueden acoplar el validador distribuido para reforzar controles post-deploy y post-simulación.
+
 ## 🚀 Roadmap v0.2.0 — Predictive Backtesting Phase
 
 - Backtesting datastore (`src/qai/datastore.py`) storing run artefacts under `var/backtests/`.

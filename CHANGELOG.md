@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Advanced multi-session 3D visualization module exporting HTML/JSON/PNG dashboards with signed audit hooks (`src/qai/visualizer_advanced.py`).
 - Evaluation pipeline and experiment engine integration for interactive visual comparisons during adaptive optimization runs.
 - CIIntegrationManager for external pipeline detection, artifact shipping, and deployment validation with signed audit events (`src/qai/integrations_ci.py`, `src/qai/deploy_validator.py`).
+- Distributed validation and redundancy coordinator with signed node auditing (`src/qai/distributed_validator.py`, `src/qai/deploy_validator.py`).
 
 ## [v0.2.0] - 2025-10-31
 ### Added
