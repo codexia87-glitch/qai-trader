@@ -1,0 +1,21 @@
+{
+  "version": "v0.4.0",
+  "tasks": [
+    {
+      "task": "Integrar optimización adaptativa y refuerzo ML.",
+      "status": "pending"
+    },
+    {
+      "task": "Implementar visualización de rendimiento multi-sesión.",
+      "status": "pending"
+    },
+    {
+      "task": "Desarrollar motor de experimentos paramétricos.",
+      "status": "pending"
+    },
+    {
+      "task": "Añadir validación de seguridad y conformidad en datos.",
+      "status": "pending"
+    }
+  ]
+}

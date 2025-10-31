@@ -88,6 +88,12 @@
       "status": "completed",
       "timestamp": "2025-10-31T04:38:43Z",
       "branch": "main"
+    },
+    {
+      "task": "Iniciar planificación de v0.4.0 (Optimización adaptativa + visualización)",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T04:38:43Z",
+      "branch": "main"
     }
   ],
   "last_commit": null,
