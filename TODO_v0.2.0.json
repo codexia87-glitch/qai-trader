@@ -1,0 +1,29 @@
+{
+  "version": "v0.2.0",
+  "tasks": [
+    {
+      "task": "Crear base de datos temporal para backtesting.",
+      "status": "pending"
+    },
+    {
+      "task": "Integrar módulo predictor ML.",
+      "status": "pending"
+    },
+    {
+      "task": "Implementar simulador de operaciones (estrategia simple).",
+      "status": "pending"
+    },
+    {
+      "task": "Validar integridad HMAC post-backtesting.",
+      "status": "pending"
+    },
+    {
+      "task": "Preparar CHANGELOG inicial para v0.2.0.",
+      "status": "pending"
+    },
+    {
+      "task": "Actualizar README con roadmap de la nueva versión.",
+      "status": "pending"
+    }
+  ]
+}
