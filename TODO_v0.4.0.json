@@ -18,7 +18,8 @@
     },
     {
       "task": "Añadir validación de seguridad y conformidad en datos.",
-      "status": "pending"
+      "status": "in-progress",
+      "timestamp": "2025-10-31T05:22:56Z"
     }
   ]
 }

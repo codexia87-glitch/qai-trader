@@ -13,6 +13,7 @@ from .metrics_adaptive import AdaptiveMetrics
 from .visualizer import MultiSessionVisualizer
 from .model_predictor import ModelPredictor
 from .logging_utils import append_signed_audit
+from .security_validator import SecurityValidator
 
 
 class EvaluationPipeline:
@@ -40,6 +41,7 @@ class EvaluationPipeline:
         hmac_key: Optional[str] = None,
         visualizer: Optional[MultiSessionVisualizer] = None,
         return_result: bool = False,
+        security_validator: Optional[SecurityValidator] = None,
     ) -> Union[Dict[str, Dict[str, float]], Tuple[Dict[str, Dict[str, float]], BacktestResult]]:
         output_dir = Path(output_dir or Path("reports"))
         output_dir.mkdir(parents=True, exist_ok=True)
@@ -73,6 +75,18 @@ class EvaluationPipeline:
             "backtest": result.metrics,
             "adaptive": adaptive_kpis,
         }
+
+        if security_validator is not None:
+            dataset = [
+                {"prediction": p, "actual": a}
+                for p, a in zip(predictions, actual)
+            ]
+            security_validator.audit_report(
+                dataset,
+                audit_log=audit_log,
+                session_id=session_id,
+                hmac_key=hmac_key,
+            )
 
         report_path = output_dir / f"{session_id or 'evaluation'}_report.json"
         report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
