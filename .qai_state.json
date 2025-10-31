@@ -79,8 +79,14 @@
     },
     {
       "task": "Definir métricas de rendimiento adaptativo.",
+      "status": "completed",
+      "timestamp": "2025-10-31T04:31:32Z",
+      "branch": "main"
+    },
+    {
+      "task": "Configurar pipeline de evaluación para estrategias adaptativas.",
       "status": "in-progress",
-      "timestamp": "2025-10-31T04:24:57Z",
+      "timestamp": "2025-10-31T04:31:32Z",
       "branch": "main"
     }
   ],

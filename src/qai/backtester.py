@@ -13,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from .datastore import BacktestDatastore
+    from .metrics_adaptive import AdaptiveMetrics
 
 
 @dataclass
@@ -102,6 +103,9 @@ class Backtester:
         datastore: Optional["BacktestDatastore"] = None,
         metadata: Optional[Dict[str, Any]] = None,
         hmac_key: Optional[str] = None,
+        adaptive_metrics: Optional["AdaptiveMetrics"] = None,
+        metrics_audit_log: Optional[Path] = None,
+        metrics_session_id: Optional[str] = None,
     ) -> BacktestResult:
         """Execute a backtest using the provided strategy callable.
 
@@ -112,6 +116,9 @@ class Backtester:
         equity = self.initial_capital
         position = 0
         entry_price = 0.0
+
+        if adaptive_metrics is not None:
+            adaptive_metrics.record_equity(equity)
 
         for idx, bar in enumerate(prices):
             if not {"open", "close"} <= bar.keys():
@@ -152,6 +159,8 @@ class Backtester:
                 )
 
             result.equity_curve.append(equity)
+            if adaptive_metrics is not None:
+                adaptive_metrics.record_equity(equity)
 
         # Close any open position at final close
         if position != 0:
@@ -202,6 +211,16 @@ class Backtester:
                 strategy.on_session_end()
             except Exception as exc:
                 logger.warning("Adaptive strategy session end hook failed: %s", exc)
+
+        if adaptive_metrics is not None and metrics_audit_log is not None:
+            try:
+                adaptive_metrics.log_update(
+                    metrics_audit_log,
+                    session_id=metrics_session_id or session_id,
+                    hmac_key=hmac_key,
+                )
+            except Exception as exc:
+                logger.warning("Adaptive metrics logging failed: %s", exc)
 
         return result
 
