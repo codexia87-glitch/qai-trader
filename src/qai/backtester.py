@@ -4,11 +4,15 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import logging
+import math
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterable, List, Optional, Sequence
+from typing import TYPE_CHECKING, Any, Callable, Dict, Iterable, List, Optional, Sequence
 
 
 logger = logging.getLogger(__name__)
+
+if TYPE_CHECKING:
+    from .datastore import BacktestDatastore
 
 
 @dataclass
@@ -34,6 +38,40 @@ class BacktestResult:
         self.metrics.setdefault("win_rate", wins / total)
         if self.equity_curve:
             self.metrics.setdefault("ending_equity", self.equity_curve[-1])
+
+        # Advanced performance metrics
+        equity_curve = self.equity_curve or []
+        if equity_curve:
+            peak = equity_curve[0]
+            max_drawdown = 0.0
+            returns: List[float] = []
+            prev = equity_curve[0]
+            for value in equity_curve[1:]:
+                if prev != 0:
+                    returns.append((value / prev) - 1.0)
+                peak = max(peak, value)
+                if peak != 0:
+                    drawdown = (value - peak) / peak
+                    if drawdown < max_drawdown:
+                        max_drawdown = drawdown
+                prev = value
+            self.metrics.setdefault("max_drawdown", abs(max_drawdown))
+            if returns:
+                mean_return = sum(returns) / len(returns)
+                variance = sum((r - mean_return) ** 2 for r in returns) / len(returns)
+                std_dev = math.sqrt(variance)
+                if std_dev > 0:
+                    sharpe = (mean_return / std_dev) * math.sqrt(len(returns))
+                else:
+                    sharpe = 0.0
+                self.metrics.setdefault("sharpe_ratio", sharpe)
+
+        if self.trades:
+            avg_pnl = sum(t.get("pnl", 0.0) for t in self.trades) / len(self.trades)
+            self.metrics.setdefault("avg_trade_pnl", avg_pnl)
+        else:
+            self.metrics.setdefault("avg_trade_pnl", 0.0)
+
         return self.metrics
 
 
@@ -61,6 +99,9 @@ class Backtester:
         strategy: Callable[[Dict[str, float]], int],
         session_id: Optional[str] = None,
         audit_log: Optional[Path] = None,
+        datastore: Optional["BacktestDatastore"] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+        hmac_key: Optional[str] = None,
     ) -> BacktestResult:
         """Execute a backtest using the provided strategy callable.
 
@@ -131,8 +172,28 @@ class Backtester:
         result.metrics["ending_equity"] = equity
         result.metrics["net_return"] = (equity / self.initial_capital) - 1
 
+        summary = result.summarize()
+
+        datastore_path: Optional[Path] = None
+        if datastore is not None:
+            if session_id is None:
+                logger.warning("Datastore provided but session_id missing; skipping persistence.")
+            else:
+                datastore_path = datastore.save_run(
+                    session_id,
+                    prices=prices,
+                    result=result,
+                metadata=metadata or {"summary": summary},
+            )
+
         if audit_log is not None:
-            self._append_audit_entry(result, session_id=session_id, audit_log=audit_log)
+            self._append_audit_entry(
+                result,
+                session_id=session_id,
+                audit_log=audit_log,
+                datastore_path=datastore_path,
+                hmac_key=hmac_key,
+            )
 
         return result
 
@@ -141,6 +202,8 @@ class Backtester:
         result: BacktestResult,
         session_id: Optional[str],
         audit_log: Path,
+        datastore_path: Optional[Path],
+        hmac_key: Optional[str],
     ) -> None:
         """Append a summary line to the audit log if available."""
         try:
@@ -150,8 +213,10 @@ class Backtester:
                 "total_trades": len(result.trades),
                 "net_return": result.metrics.get("net_return"),
             }
+            if datastore_path:
+                entry["datastore_path"] = str(datastore_path)
             from .logging_utils import append_signed_audit  # lazy import
 
-            append_signed_audit(entry, audit_log=audit_log)
+            append_signed_audit(entry, audit_log=audit_log, hmac_key=hmac_key)
         except Exception as exc:  # pragma: no cover - logging path is best-effort
             logger.warning("Failed to append backtest audit entry: %s", exc)

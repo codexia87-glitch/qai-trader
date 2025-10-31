@@ -3,27 +3,33 @@
   "tasks": [
     {
       "task": "Crear base de datos temporal para backtesting.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T03:06:29Z"
     },
     {
       "task": "Integrar módulo predictor ML.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T03:13:21Z"
     },
     {
-      "task": "Implementar simulador de operaciones (estrategia simple).",
-      "status": "pending"
+      "task": "Ampliar simulador y estrategia avanzada para backtesting.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:23:28Z"
     },
     {
       "task": "Validar integridad HMAC post-backtesting.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T03:36:10Z"
     },
     {
       "task": "Preparar CHANGELOG inicial para v0.2.0.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T03:42:03Z"
     },
     {
       "task": "Actualizar README con roadmap de la nueva versión.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T03:42:03Z"
     }
   ]
 }

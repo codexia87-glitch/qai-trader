@@ -3,10 +3,14 @@
 from __future__ import annotations
 
 import logging
+import math
 from pathlib import Path
 from typing import Any, Dict, Iterable, Optional, Sequence
 
-import numpy as np
+try:
+    import numpy as np
+except Exception:  # pragma: no cover
+    np = None
 
 try:
     import torch
@@ -60,10 +64,16 @@ class ModelPredictor:
             raise ValueError(f"Expected {self.input_size} features, got {len(features)}")
 
         if self._model is None:
-            # numpy fallback: simple weighted average
-            weights = np.linspace(1.0, 2.0, self.input_size)
-            value = float(np.dot(weights, np.asarray(features)) / (weights.sum() or 1.0))
-            prediction = float(np.tanh(value))
+            if np is not None:
+                weights = np.linspace(1.0, 2.0, self.input_size)
+                numerator = float(np.dot(weights, np.asarray(features)))
+                denom = float(weights.sum()) or 1.0
+            else:
+                weights = [1.0 + (i / max(1, self.input_size - 1)) for i in range(self.input_size)]
+                numerator = sum(w * float(f) for w, f in zip(weights, features))
+                denom = sum(weights) or 1.0
+            value = numerator / denom
+            prediction = float(math.tanh(value))
         else:
             with torch.no_grad():
                 tensor = torch.tensor(features, dtype=torch.float32).view(1, -1)
@@ -104,6 +114,7 @@ class ModelPredictor:
         prediction: float,
         audit_log: Optional[Path] = None,
         session_id: Optional[str] = None,
+        hmac_key: Optional[str] = None,
     ) -> None:
         """Record a prediction event in the audit log."""
         if audit_log is None:
@@ -115,6 +126,6 @@ class ModelPredictor:
                 "prediction": float(prediction),
                 "feature_hash": hash(tuple(round(f, 6) for f in features)),
             }
-            append_signed_audit(entry, audit_log=audit_log)
+            append_signed_audit(entry, audit_log=audit_log, hmac_key=hmac_key)
         except Exception as exc:  # pragma: no cover
             logger.warning("Failed to append predictor audit entry: %s", exc)
