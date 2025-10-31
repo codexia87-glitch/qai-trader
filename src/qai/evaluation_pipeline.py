@@ -5,10 +5,10 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
-from typing import Dict, Iterable, Optional, Sequence, Tuple
+from typing import Dict, Iterable, Optional, Sequence, Tuple, Union
 
 from .adaptive_strategy import AdaptiveStrategy
-from .backtester import Backtester
+from .backtester import Backtester, BacktestResult
 from .metrics_adaptive import AdaptiveMetrics
 from .visualizer import MultiSessionVisualizer
 from .model_predictor import ModelPredictor
@@ -39,7 +39,8 @@ class EvaluationPipeline:
         audit_log: Optional[Path] = None,
         hmac_key: Optional[str] = None,
         visualizer: Optional[MultiSessionVisualizer] = None,
-    ) -> Dict[str, Dict[str, float]]:
+        return_result: bool = False,
+    ) -> Union[Dict[str, Dict[str, float]], Tuple[Dict[str, Dict[str, float]], BacktestResult]]:
         output_dir = Path(output_dir or Path("reports"))
         output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -111,4 +112,6 @@ class EvaluationPipeline:
                 hmac_key=hmac_key,
             )
 
+        if return_result:
+            return report, result
         return report
