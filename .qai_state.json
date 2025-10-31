@@ -178,6 +178,12 @@
       "status": "completed",
       "timestamp": "2025-10-31T18:54:51Z",
       "branch": "dev/v0.6.0"
+    },
+    {
+      "task": "Iniciar planificación de v0.7.0 (RL continuo, dataflow, reporting, rollback).",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T19:19:15Z",
+      "branch": "main"
     }
   ],
   "last_commit": null,

@@ -3,11 +3,20 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+## [v0.6.0] - 2025-10-31
 ### Added
-- Advanced multi-session 3D visualization module exporting HTML/JSON/PNG dashboards with signed audit hooks (`src/qai/visualizer_advanced.py`).
-- Evaluation pipeline and experiment engine integration for interactive visual comparisons during adaptive optimization runs.
-- CIIntegrationManager for external pipeline detection, artifact shipping, and deployment validation with signed audit events (`src/qai/integrations_ci.py`, `src/qai/deploy_validator.py`).
-- Distributed validation and redundancy coordinator with signed node auditing (`src/qai/distributed_validator.py`, `src/qai/deploy_validator.py`).
+- Adaptive continuous RL optimizer with dynamic memory tuning and signed audit events (`src/qai/rl_adaptive_optimizer.py`, `tests/test_rl_adaptive_optimizer.py`).
+- Advanced 3D multi-session visualization exporting HTML/JSON/PNG dashboards with audit logging (`src/qai/visualizer_advanced.py`, `tests/test_visualizer_advanced.py`).
+- CIIntegrationManager for external pipeline orchestration, artifact shipping, and deployment validation hooks (`src/qai/integrations_ci.py`, `tests/test_integrations_ci.py`).
+- Distributed validation and redundancy coordination across nodes with per-node hashing (`src/qai/distributed_validator.py`, `tests/test_distributed_validator.py`).
+
+### Improved
+- Backtester, evaluation pipeline, and experiment engine now integrate adaptive optimizers, advanced dashboards, CI hooks, and distributed validation stages (`src/qai/backtester.py`, `src/qai/evaluation_pipeline.py`, `src/qai/experiment_engine.py`).
+- Deploy validator extends manifest checks with pipeline reporting and distributed post-deploy verification (`src/qai/deploy_validator.py`).
+
+### Security
+- Expanded audit coverage for CI, visualization, and distributed validation events ensuring HMAC signatures for every stage (`audit.log`).
 
 ## [v0.2.0] - 2025-10-31
 ### Added
