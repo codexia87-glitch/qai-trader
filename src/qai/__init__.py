@@ -19,6 +19,7 @@ __all__ = [
     "OptimizerRL",
     "MultiSessionVisualizer",
     "ExperimentEngine",
+    "IntegrationsManager",
     "RLContinuousAgent",
     "ThresholdCrossStrategy",
 ]
@@ -37,6 +38,7 @@ try:
     from .optimizer import OptimizerRL
     from .visualizer import MultiSessionVisualizer
     from .experiment_engine import ExperimentEngine
+    from .integrations import IntegrationsManager
     from .rl_continuous import RLContinuousAgent
 except ImportError:  # pragma: no cover - modules may not be ready during stub generation
-    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = MultiSessionVisualizer = ExperimentEngine = RLContinuousAgent = None  # type: ignore
+    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = AdaptiveMetrics = AdaptiveKPIs = EvaluationPipeline = OptimizerRL = MultiSessionVisualizer = ExperimentEngine = IntegrationsManager = RLContinuousAgent = None  # type: ignore

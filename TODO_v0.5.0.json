@@ -13,7 +13,8 @@
     },
     {
       "task": "Integración avanzada con pipelines externos (CSV/Parquet/S3, hooks CI).",
-      "status": "pending"
+      "status": "in-progress",
+      "timestamp": "2025-10-31T06:25:00Z"
     },
     {
       "task": "Validación automática y despliegue experimental (smoke + canary + rollback).",

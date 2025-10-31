@@ -136,6 +136,12 @@
       "status": "completed",
       "timestamp": "2025-10-31T06:19:16Z",
       "branch": "dev/v0.5.0"
+    },
+    {
+      "task": "Integración avanzada con pipelines externos (CSV/Parquet/S3, hooks CI).",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T06:25:00Z",
+      "branch": "dev/v0.5.0"
     }
   ],
   "last_commit": null,
