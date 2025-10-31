@@ -37,6 +37,7 @@ class OptimizerRL:
     ) -> None:
         if input_size <= 0:
             raise ValueError("input_size must be positive")
+        self.input_size = input_size
         self.learning_rate = learning_rate
         self.state = OptimizerState(weights=[0.0] * input_size, epsilon=epsilon, gamma=gamma)
         self.audit_log = audit_log
@@ -90,3 +91,16 @@ class OptimizerRL:
         if score <= -self.state.epsilon:
             return -1
         return 0
+
+    def build_adaptive_optimizer(self, **kwargs: object) -> "RLAdaptiveOptimizer":
+        """Create an adaptive optimizer wrapper sharing the same state."""
+        from .rl_adaptive_optimizer import RLAdaptiveOptimizer
+
+        params = {
+            "base_optimizer": self,
+            "audit_log": self.audit_log,
+            "session_id": self.session_id if hasattr(self, "session_id") else None,
+            "hmac_key": self.hmac_key if hasattr(self, "hmac_key") else None,
+        }
+        params.update(kwargs)
+        return RLAdaptiveOptimizer(self.input_size, **params)

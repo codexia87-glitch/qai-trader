@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from .datastore import BacktestDatastore
     from .metrics_adaptive import AdaptiveMetrics
     from .rl_continuous import RLContinuousAgent
+    from .rl_adaptive_optimizer import RLAdaptiveOptimizer
 
 
 @dataclass
@@ -108,6 +109,7 @@ class Backtester:
         metrics_audit_log: Optional[Path] = None,
         metrics_session_id: Optional[str] = None,
         rl_agent: Optional["RLContinuousAgent"] = None,
+        adaptive_optimizer: Optional["RLAdaptiveOptimizer"] = None,
     ) -> BacktestResult:
         """Execute a backtest using the provided strategy callable.
 
@@ -147,6 +149,8 @@ class Backtester:
                 self._notify_trade_close(strategy, trade)
                 if rl_agent is not None:
                     rl_agent.observe_trade(trade)
+                if adaptive_optimizer is not None:
+                    adaptive_optimizer.observe_trade(trade)
                 logger.debug("closed trade=%s", trade)
                 position = 0
 
@@ -183,6 +187,8 @@ class Backtester:
             self._notify_trade_close(strategy, trade)
             if rl_agent is not None:
                 rl_agent.observe_trade(trade)
+            if adaptive_optimizer is not None:
+                adaptive_optimizer.observe_trade(trade)
             logger.debug("closed final trade=%s", trade)
 
         result.metrics["starting_equity"] = self.initial_capital
@@ -233,6 +239,12 @@ class Backtester:
                 rl_agent.end_episode()
             except Exception as exc:
                 logger.warning("RL continuous agent update failed: %s", exc)
+
+        if adaptive_optimizer is not None:
+            try:
+                adaptive_optimizer.finalize()
+            except Exception as exc:
+                logger.warning("Adaptive optimizer finalize failed: %s", exc)
 
         return result
 
