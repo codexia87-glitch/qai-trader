@@ -121,8 +121,8 @@
     },
     {
       "task": "Iniciar planificación de v0.5.0 (RL continuo + dashboard + integraciones)",
-      "status": "in-progress",
-      "timestamp": "2025-10-31T05:32:12Z",
+      "status": "completed",
+      "timestamp": "2025-10-31T16:32:08Z",
       "branch": "main"
     },
     {
@@ -139,8 +139,14 @@
     },
     {
       "task": "Integración avanzada con pipelines externos (CSV/Parquet/S3, hooks CI).",
-      "status": "in-progress",
-      "timestamp": "2025-10-31T06:25:00Z",
+      "status": "completed",
+      "timestamp": "2025-10-31T12:49:43Z",
+      "branch": "dev/v0.5.0"
+    },
+    {
+      "task": "Validación automática y despliegue experimental (smoke + canary + rollback).",
+      "status": "completed",
+      "timestamp": "2025-10-31T16:32:08Z",
       "branch": "dev/v0.5.0"
     }
   ],
