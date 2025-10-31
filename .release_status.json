@@ -1,7 +1,7 @@
 {
-  "task": "Publicar release v0.1.0",
+  "task": "Publicar release v0.2.0",
   "status": "completed",
-  "method": "curl",
-  "timestamp": "2025-10-31T02:35:56Z",
-  "url": "https://github.com/codexia87-glitch/qai-trader/releases/tag/v0.1.0"
+  "method": "git tag",
+  "timestamp": "2025-10-31T03:51:58Z",
+  "url": "https://github.com/codexia87-glitch/qai-trader/releases/tag/v0.2.0"
 }
