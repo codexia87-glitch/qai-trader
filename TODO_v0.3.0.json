@@ -8,11 +8,13 @@
     },
     {
       "task": "Integrar scoring ML en el predictor.",
-      "status": "pending"
+      "status": "completed",
+      "timestamp": "2025-10-31T04:24:57Z"
     },
     {
       "task": "Definir métricas de rendimiento adaptativo.",
-      "status": "pending"
+      "status": "in-progress",
+      "timestamp": "2025-10-31T04:24:57Z"
     },
     {
       "task": "Configurar pipeline de evaluación para estrategias adaptativas.",

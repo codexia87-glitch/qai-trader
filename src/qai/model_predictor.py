@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import math
 from pathlib import Path
-from typing import Any, Dict, Iterable, Optional, Sequence
+from typing import Any, Dict, Iterable, Optional, Sequence, Tuple
 
 try:
     import numpy as np
@@ -20,6 +20,7 @@ except Exception:  # pragma: no cover
     nn = None
 
 from .logging_utils import append_signed_audit
+from .scoring import ScoreEvaluator
 
 
 logger = logging.getLogger(__name__)
@@ -40,6 +41,7 @@ class ModelPredictor:
         self.hidden_size = hidden_size
         self.checkpoint_path = checkpoint_path
         self._model = self._build_model() if torch else None
+        self._scorer = ScoreEvaluator()
 
         if checkpoint_path:
             self.load_checkpoint(checkpoint_path)
@@ -82,9 +84,24 @@ class ModelPredictor:
         logger.debug("Generated prediction=%s", prediction)
         return prediction
 
-    def batch_predict(self, batch: Iterable[Sequence[float]]) -> Sequence[float]:
-        """Generate predictions for a batch of feature vectors."""
-        return [self.predict(features) for features in batch]
+    def batch_predict(
+        self,
+        batch: Iterable[Sequence[float]],
+        *,
+        actual: Optional[Sequence[float]] = None,
+        pnl: Optional[Sequence[float]] = None,
+        audit_log: Optional[Path] = None,
+        session_id: Optional[str] = None,
+        hmac_key: Optional[str] = None,
+    ) -> Any:
+        """Generate predictions and optionally evaluate scoring metrics."""
+        predictions = [self.predict(features) for features in batch]
+        if actual is not None:
+            metrics = self._scorer.evaluate(predictions, actual, pnl)
+            if audit_log is not None:
+                self._log_scoring(metrics, audit_log, session_id=session_id, hmac_key=hmac_key)
+            return predictions, metrics
+        return predictions
 
     def load_checkpoint(self, path: Path) -> None:
         """Load model weights from checkpoint if torch backend is available."""
@@ -129,3 +146,19 @@ class ModelPredictor:
             append_signed_audit(entry, audit_log=audit_log, hmac_key=hmac_key)
         except Exception as exc:  # pragma: no cover
             logger.warning("Failed to append predictor audit entry: %s", exc)
+
+    def _log_scoring(
+        self,
+        metrics: Dict[str, float],
+        audit_log: Path,
+        *,
+        session_id: Optional[str],
+        hmac_key: Optional[str],
+    ) -> None:
+        entry = {
+            "module": "qai.scoring",
+            "event": "evaluate",
+            "metrics": metrics,
+            "session_id": session_id,
+        }
+        append_signed_audit(entry, audit_log=audit_log, hmac_key=hmac_key, session_id=session_id)

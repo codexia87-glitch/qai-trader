@@ -12,6 +12,7 @@ __all__ = [
     "HMACFailure",
     "PredictorThresholdStrategy",
     "AdaptiveStrategy",
+    "ScoreEvaluator",
     "ThresholdCrossStrategy",
 ]
 
@@ -23,5 +24,6 @@ try:
     from .model_predictor import ModelPredictor
     from .hmac_utils import HMACFailure
     from .adaptive_strategy import AdaptiveStrategy
+    from .scoring import ScoreEvaluator
 except ImportError:  # pragma: no cover - modules may not be ready during stub generation
-    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = None  # type: ignore
+    Backtester = BacktestResult = BacktestDatastore = BacktestSimulator = ThresholdCrossStrategy = PredictorThresholdStrategy = MultiSessionReport = ModelPredictor = HMACFailure = AdaptiveStrategy = ScoreEvaluator = None  # type: ignore

@@ -70,6 +70,18 @@
       "status": "in-progress",
       "timestamp": "2025-10-31T04:08:58Z",
       "branch": "main"
+    },
+    {
+      "task": "Integrar scoring ML en el predictor.",
+      "status": "completed",
+      "timestamp": "2025-10-31T04:24:57Z",
+      "branch": "main"
+    },
+    {
+      "task": "Definir métricas de rendimiento adaptativo.",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T04:24:57Z",
+      "branch": "main"
     }
   ],
   "last_commit": null,
