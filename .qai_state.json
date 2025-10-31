@@ -2,7 +2,57 @@
   "version": 1,
   "project": "qai-trader",
   "sprint": null,
-  "completed_tasks": [],
+  "completed_tasks": [
+    {
+      "task": "Publicar release v0.1.0",
+      "status": "completed",
+      "method": "curl",
+      "timestamp": "2025-10-31T02:35:56Z",
+      "url": "https://github.com/codexia87-glitch/qai-trader/releases/tag/v0.1.0"
+    },
+    {
+      "task": "Crear base de datos temporal para backtesting.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:06:29Z",
+      "branch": "dev/v0.2.0"
+    },
+    {
+      "task": "Integrar módulo predictor ML.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:13:21Z",
+      "branch": "dev/v0.2.0"
+    },
+    {
+      "task": "Ampliar simulador y estrategia avanzada para backtesting.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:23:28Z",
+      "branch": "dev/v0.2.0"
+    },
+    {
+      "task": "Validar integridad HMAC post-backtesting.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:36:10Z",
+      "branch": "dev/v0.2.0"
+    },
+    {
+      "task": "Preparar CHANGELOG inicial para v0.2.0.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:42:03Z",
+      "branch": "release/v0.2.0"
+    },
+    {
+      "task": "Actualizar README con roadmap de la nueva versión.",
+      "status": "completed",
+      "timestamp": "2025-10-31T03:42:03Z",
+      "branch": "release/v0.2.0"
+    },
+    {
+      "task": "Iniciar desarrollo de v0.2.0 (Backtesting + IA Predictiva)",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T02:51:02Z",
+      "branch": "dev/v0.2.0"
+    }
+  ],
   "last_commit": null,
   "modified_files": [],
   "last_script": "scripts/run_mt5_client.py",

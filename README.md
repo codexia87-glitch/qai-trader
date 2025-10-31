@@ -26,6 +26,23 @@ Project layout (initial)
 
 This scaffold intentionally contains no business logic. Add concrete implementations in future sprints.
 
+## 🚀 Roadmap v0.2.0 — Predictive Backtesting Phase
+
+- Backtesting datastore (`src/qai/datastore.py`) storing run artefacts under `var/backtests/`.
+- Strategy toolkit with threshold and predictor-driven logic (`src/qai/strategies.py`).
+- `ModelPredictor` integration (NumPy/PyTorch) plus audit logging for generated signals.
+- Automated tests validating datastore persistence and predictor-driven simulations.
+- HMAC validation helpers (`src/qai/hmac_utils.py`) verifying audit integrity after runs.
+- Multi-session simulator (`src/qai/simulator.py`) generating aggregate performance summaries.
+
+## 📦 Release v0.2.0 Highlights
+
+- Branch `release/v0.2.0` contains the finalized predictive & backtesting stack ready for tagging.
+- CHANGELOG now documents predictor, simulator and HMAC validation improvements for the 0.2.0 drop.
+- Audit log entries are fully HMAC-signed across backtester, predictor and simulator workflows.
+- Use `pytest tests/test_backtester.py tests/test_predictor_integration.py tests/test_backtest_simulator.py tests/test_hmac_utils.py` to validate the release locally.
+- Next steps: tag `v0.2.0`, merge `release/v0.2.0` after QA, and plan the v0.2.x enhancements.
+
 ## 🔐 CI Setup — Secrets
 
 The CI workflow `test_audit_verification.yml` verifies the integrity of the append-only `audit.log` by checking HMAC-SHA256 signatures. For the workflow to pass you must provide the secret key used to sign/verify audit entries.

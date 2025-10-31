@@ -1,6 +1,7 @@
 pytest>=7.0
 # Minimal runtime / dev dependencies for Sprint 0
 pytest>=7.0
+numpy>=1.26
 # Optional dependency for live MetaTrader5 integration
 # Install only when you intend to run live trades
 MetaTrader5>=5.0
