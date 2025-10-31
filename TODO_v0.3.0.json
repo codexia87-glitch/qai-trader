@@ -1,0 +1,21 @@
+{
+  "version": "v0.3.0",
+  "tasks": [
+    {
+      "task": "Diseñar estrategia adaptativa basada en señales dinámicas.",
+      "status": "pending"
+    },
+    {
+      "task": "Integrar scoring ML en el predictor.",
+      "status": "pending"
+    },
+    {
+      "task": "Definir métricas de rendimiento adaptativo.",
+      "status": "pending"
+    },
+    {
+      "task": "Configurar pipeline de evaluación para estrategias adaptativas.",
+      "status": "pending"
+    }
+  ]
+}
