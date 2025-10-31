@@ -26,6 +26,12 @@ Project layout (initial)
 
 This scaffold intentionally contains no business logic. Add concrete implementations in future sprints.
 
+## ✨ Advanced Visualization (v0.6.0 in progress)
+
+- `AdvancedMultiSessionVisualizer` (`src/qai/visualizer_advanced.py`) renders multi-session dashboards with interactive 3D equity surfaces, JSON summaries, and PNG snapshots.
+- The evaluation pipeline and experiment engine accept the advanced visualizer for side-by-side comparisons with signed audit events (`qai.visualizer3d/*`).
+- Generated dashboards export HTML/JSON/PNG assets suitable for release auditing and artifact sharing.
+
 ## 🚀 Roadmap v0.2.0 — Predictive Backtesting Phase
 
 - Backtesting datastore (`src/qai/datastore.py`) storing run artefacts under `var/backtests/`.

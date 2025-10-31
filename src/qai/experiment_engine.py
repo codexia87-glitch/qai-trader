@@ -5,13 +5,16 @@ from __future__ import annotations
 import csv
 import json
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional
+from typing import Dict, Iterable, List, Optional, TYPE_CHECKING
 
 from .datastore import BacktestDatastore
 from .evaluation_pipeline import EvaluationPipeline
 from .visualizer import MultiSessionVisualizer
 from .dashboard import MultiSessionDashboard
 from .logging_utils import append_signed_audit
+
+if TYPE_CHECKING:  # pragma: no cover
+    from .visualizer_advanced import AdvancedMultiSessionVisualizer
 
 
 class ExperimentEngine:
@@ -25,6 +28,7 @@ class ExperimentEngine:
         datastore: Optional[BacktestDatastore] = None,
         visualizer: Optional[MultiSessionVisualizer] = None,
         dashboard: Optional[MultiSessionDashboard] = None,
+        visualizer_advanced: Optional["AdvancedMultiSessionVisualizer"] = None,
     ) -> None:
         self.pipeline = pipeline or EvaluationPipeline()
         self.datastore = datastore
@@ -32,6 +36,7 @@ class ExperimentEngine:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.visualizer = visualizer or MultiSessionVisualizer(output_dir=self.output_dir / "visuals")
         self.dashboard = dashboard or MultiSessionDashboard(output_dir=self.output_dir / "dashboards")
+        self.visualizer_advanced = visualizer_advanced
 
     def run_batch(
         self,
@@ -41,6 +46,7 @@ class ExperimentEngine:
         hmac_key: Optional[str] = None,
     ) -> Dict[str, Path]:
         summaries: List[Dict[str, object]] = []
+        advanced_sessions: List[Dict[str, object]] = []
         for scenario in scenarios:
             scenario_id = str(scenario.get("id"))
             strategy = scenario["strategy"]
@@ -64,6 +70,7 @@ class ExperimentEngine:
                 hmac_key=hmac_key,
                 visualizer=self.visualizer,
                 dashboard=self.dashboard,
+                visualizer_advanced=self.visualizer_advanced,
                 return_result=True,
             )
 
@@ -71,6 +78,13 @@ class ExperimentEngine:
                 {
                     "id": scenario_id,
                     "report": report,
+                }
+            )
+            advanced_sessions.append(
+                {
+                    "session_id": scenario_id,
+                    "equity_curve": result.equity_curve,
+                    "metrics": report,
                 }
             )
 
@@ -105,6 +119,15 @@ class ExperimentEngine:
                 },
                 audit_log=audit_log,
                 hmac_key=hmac_key,
+            )
+
+        if self.visualizer_advanced is not None and advanced_sessions:
+            self.visualizer_advanced.render(
+                advanced_sessions,
+                session_id="experiment-batch",
+                audit_log=audit_log,
+                hmac_key=hmac_key,
+                title="Experiment Scenario Comparison",
             )
 
         return {"summary": summary_path, "metrics": csv_path}

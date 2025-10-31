@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Advanced multi-session 3D visualization module exporting HTML/JSON/PNG dashboards with signed audit hooks (`src/qai/visualizer_advanced.py`).
+- Evaluation pipeline and experiment engine integration for interactive visual comparisons during adaptive optimization runs.
+
 ## [v0.2.0] - 2025-10-31
 ### Added
 - Backtest JSON datastore for session artifacts and metadata (`src/qai/datastore.py`).
