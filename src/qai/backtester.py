@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 if TYPE_CHECKING:
     from .datastore import BacktestDatastore
     from .metrics_adaptive import AdaptiveMetrics
+    from .rl_continuous import RLContinuousAgent
 
 
 @dataclass
@@ -106,6 +107,7 @@ class Backtester:
         adaptive_metrics: Optional["AdaptiveMetrics"] = None,
         metrics_audit_log: Optional[Path] = None,
         metrics_session_id: Optional[str] = None,
+        rl_agent: Optional["RLContinuousAgent"] = None,
     ) -> BacktestResult:
         """Execute a backtest using the provided strategy callable.
 
@@ -143,6 +145,8 @@ class Backtester:
                 }
                 result.add_trade(trade)
                 self._notify_trade_close(strategy, trade)
+                if rl_agent is not None:
+                    rl_agent.observe_trade(trade)
                 logger.debug("closed trade=%s", trade)
                 position = 0
 
@@ -177,6 +181,8 @@ class Backtester:
             result.add_trade(trade)
             result.equity_curve[-1] = equity
             self._notify_trade_close(strategy, trade)
+            if rl_agent is not None:
+                rl_agent.observe_trade(trade)
             logger.debug("closed final trade=%s", trade)
 
         result.metrics["starting_equity"] = self.initial_capital
@@ -221,6 +227,12 @@ class Backtester:
                 )
             except Exception as exc:
                 logger.warning("Adaptive metrics logging failed: %s", exc)
+
+        if rl_agent is not None:
+            try:
+                rl_agent.end_episode()
+            except Exception as exc:
+                logger.warning("RL continuous agent update failed: %s", exc)
 
         return result
 

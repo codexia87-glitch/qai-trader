@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import List, Optional, Sequence
 
 try:
@@ -30,7 +31,7 @@ class OptimizerRL:
         learning_rate: float = 0.1,
         gamma: float = 0.95,
         epsilon: float = 0.1,
-        audit_log: Optional[str] = None,
+        audit_log: Optional[Path] = None,
         session_id: Optional[str] = None,
         hmac_key: Optional[str] = None,
     ) -> None:
