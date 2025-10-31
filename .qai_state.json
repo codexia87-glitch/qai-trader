@@ -58,6 +58,18 @@
       "status": "completed",
       "timestamp": "2025-10-31T03:51:58Z",
       "branch": "dev/v0.2.0"
+    },
+    {
+      "task": "Diseñar estrategia adaptativa basada en señales dinámicas.",
+      "status": "completed",
+      "timestamp": "2025-10-31T04:08:58Z",
+      "branch": "main"
+    },
+    {
+      "task": "Iniciar desarrollo de v0.3.0 (Estrategia adaptativa + scoring ML)",
+      "status": "in-progress",
+      "timestamp": "2025-10-31T04:08:58Z",
+      "branch": "main"
     }
   ],
   "last_commit": null,

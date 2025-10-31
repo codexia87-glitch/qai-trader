@@ -135,6 +135,7 @@ class Backtester:
                     "pnl": pnl,
                 }
                 result.add_trade(trade)
+                self._notify_trade_close(strategy, trade)
                 logger.debug("closed trade=%s", trade)
                 position = 0
 
@@ -166,6 +167,7 @@ class Backtester:
             }
             result.add_trade(trade)
             result.equity_curve[-1] = equity
+            self._notify_trade_close(strategy, trade)
             logger.debug("closed final trade=%s", trade)
 
         result.metrics["starting_equity"] = self.initial_capital
@@ -195,7 +197,20 @@ class Backtester:
                 hmac_key=hmac_key,
             )
 
+        if hasattr(strategy, "on_session_end"):
+            try:
+                strategy.on_session_end()
+            except Exception as exc:
+                logger.warning("Adaptive strategy session end hook failed: %s", exc)
+
         return result
+
+    def _notify_trade_close(self, strategy: Callable[[Dict[str, float]], int], trade: Dict[str, Any]) -> None:
+        if hasattr(strategy, "on_trade_close"):
+            try:
+                strategy.on_trade_close(trade)
+            except Exception as exc:
+                logger.warning("Adaptive strategy hook failed: %s", exc)
 
     def _append_audit_entry(
         self,
