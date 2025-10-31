@@ -1,0 +1,21 @@
+{
+  "version": "v0.5.0",
+  "tasks": [
+    {
+      "task": "Aprendizaje reforzado continuo con memoria de experiencia.",
+      "status": "pending"
+    },
+    {
+      "task": "Dashboard interactivo multi-sesión (API + UI).",
+      "status": "pending"
+    },
+    {
+      "task": "Integración avanzada con pipelines externos (CSV/Parquet/S3, hooks CI).",
+      "status": "pending"
+    },
+    {
+      "task": "Validación automática y despliegue experimental (smoke + canary + rollback).",
+      "status": "pending"
+    }
+  ]
+}

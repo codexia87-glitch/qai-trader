@@ -1,0 +1,24 @@
+{
+  "scoring": {
+    "accuracy": 0.5,
+    "stability": 1.0,
+    "reward": 0.11111111111111108
+  },
+  "backtest": {
+    "starting_equity": 10000.0,
+    "ending_equity": 10000.6,
+    "net_return": 5.999999999994898e-05,
+    "total_trades": 2,
+    "wins": 2,
+    "losses": 0,
+    "win_rate": 1.0,
+    "max_drawdown": 0.0,
+    "sharpe_ratio": 0.0,
+    "avg_trade_pnl": 0.30000000000000426
+  },
+  "adaptive": {
+    "stability": 1.0,
+    "volatility": 0.1000000000003638,
+    "adaptive_score": 0.9090909090906084
+  }
+}

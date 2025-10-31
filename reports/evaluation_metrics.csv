@@ -1,0 +1,7 @@
+metric,value
+scoring.accuracy,0.5
+scoring.stability,1.0
+scoring.reward,0.11111111111111108
+adaptive.stability,1.0
+adaptive.volatility,0.1000000000003638
+adaptive.adaptive_score,0.9090909090906084

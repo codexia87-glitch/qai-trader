@@ -115,8 +115,14 @@
     },
     {
       "task": "Añadir validación de seguridad y conformidad en datos.",
+      "status": "completed",
+      "timestamp": "2025-10-31T05:26:06Z",
+      "branch": "main"
+    },
+    {
+      "task": "Iniciar planificación de v0.5.0 (RL continuo + dashboard + integraciones)",
       "status": "in-progress",
-      "timestamp": "2025-10-31T05:22:56Z",
+      "timestamp": "2025-10-31T05:32:12Z",
       "branch": "main"
     }
   ],
