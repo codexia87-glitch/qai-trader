@@ -7,24 +7,114 @@ Badge updated to point to: `codexia87-glitch/qai-trader`
 Project: qai-trader — minimal scaffold for QUANT AI intraday trading. See `./.github/workflows/test_audit_verification.yml` for CI details.
 # qai-trader
 
-Minimal scaffold for a QUANT AI intraday trading system (Sprint 0).
+Quantum AI Trading System with FastAPI Bridge for MetaTrader 5 integration.
 
-This repository contains an initial project skeleton to connect Python-based quant/AI code with MT5 (MQL5) later. At this stage there is no business logic, no network calls, and no data ingestion — only a minimal package structure, configuration files, and a smoke test.
+## 🚀 Quick Start (Windows - All-in-One Setup)
 
-Quick start
-1. Create and activate a virtual environment (optional but recommended).
-2. Install dependencies:
-   pip install -r requirements.txt
-3. Run tests:
-   pytest -q
+**NEW: Complete Windows installation guide available!**
 
-Project layout (initial)
-- src/: Python package stubs for domain areas (data, ai, quant, bridge, etc.)
-- config/: YAML configuration placeholder
-- tests/: smoke test that imports modules to ensure packaging is correct
-- mt5/: placeholder for MQL5 Expert Advisor (EA) later
+### Prerequisites
+- Windows 10/11 (64-bit)
+- Python 3.11+
+- MetaTrader 5
+- Git
 
-This scaffold intentionally contains no business logic. Add concrete implementations in future sprints.
+### Installation (30 minutes)
+```powershell
+# 1. Clone repository
+git clone https://github.com/codexia87-glitch/qai-trader.git
+cd qai-trader
+
+# 2. Check prerequisites
+.\scripts\check_windows_setup.ps1
+
+# 3. Setup Python environment
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# 4. Start bridge server (localhost mode)
+.\scripts\start_bridge_server.ps1
+
+# 5. Test connection
+.\scripts\test_bridge_local.ps1
+```
+
+**📖 Full Windows Guide:** See [`WINDOWS_SETUP_GUIDE.md`](./WINDOWS_SETUP_GUIDE.md) for step-by-step instructions including MT5 EA installation.
+
+**📋 System Audit:** See [`AUDIT_REPORT_2025-11-06.md`](./AUDIT_REPORT_2025-11-06.md) for complete roadmap and implementation status.
+
+---
+
+## 📂 Project Structure
+- `src/`: Python packages (strategies, bridge, quant modules)
+- `core/`: FastAPI bridge server
+- `scripts/`: Utilities (signal generation, testing, startup)
+- `mt5/`: MetaTrader 5 Expert Advisors (MQL5)
+- `config/`: YAML configuration
+- `tests/`: Unit and integration tests
+
+---
+
+## 🌐 Bridge Architecture
+
+**Localhost Mode (Recommended for Windows):**
+```
+Windows PC:
+├── Python Bridge (127.0.0.1:8443)
+├── MT5 Client EA
+└── Signal Generator
+    → All on same machine (~1ms latency)
+```
+
+**LAN Mode (Mac/Windows Split):**
+```
+Mac:
+├── Python Bridge (192.168.0.100:8443)
+└── Signal Generator
+
+Windows:
+└── MT5 Client EA
+    → Connects via LAN (~10-50ms latency)
+```
+
+---
+
+## 🧪 Testing
+
+### Local Testing
+```powershell
+# Generate test signal
+python scripts\emit_example_signal.py --symbol EURUSD --side BUY
+
+# Check bridge health
+curl http://127.0.0.1:8443/health
+
+# Run unit tests
+pytest -q
+```
+
+---
+
+## 🎯 Current Status (v0.7.0 in progress)
+
+**✅ Completed:**
+- FastAPI bridge server with authentication (Token + HMAC)
+- MT5 Expert Advisor with localhost optimization
+- Signal queue system with archiving
+- Feedback loop (EA → Bridge)
+- Windows PowerShell scripts
+
+**⏳ In Progress:**
+- Automated strategy generation (EMA/RSI)
+- Trade feedback persistence
+- KPI metrics and monitoring
+
+**📊 Progress:** 42% complete (26/61 roadmap items)
+
+See [`AUDIT_REPORT_2025-11-06.md`](./AUDIT_REPORT_2025-11-06.md) for detailed breakdown.
+
+---
 
 ## ✨ Advanced Visualization (v0.6.0 in progress)
 

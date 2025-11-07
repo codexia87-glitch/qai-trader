@@ -2,6 +2,12 @@ pytest>=7.0
 # Minimal runtime / dev dependencies for Sprint 0
 pytest>=7.0
 numpy>=1.26
+
+# FastAPI Bridge Server (for Mac/LAN bridge)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+python-dotenv>=1.0.0
+
 # Optional dependency for live MetaTrader5 integration
 # Install only when you intend to run live trades
 MetaTrader5>=5.0

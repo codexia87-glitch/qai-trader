@@ -210,6 +210,46 @@
         "format": "json"
       },
       "ts": "2025-10-30T04:02:41.506865Z"
+    },
+    {
+      "path": "/Users/soybillonario/Visual studio Code insiders/qai-trader/example_signals/EURUSD_BUY_20251107T030858Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-11-07T03:08:58.785656Z"
+    },
+    {
+      "path": "/Users/soybillonario/Visual studio Code insiders/qai-trader/example_signals/EURUSD_BUY_20251107T031029Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-11-07T03:10:29.098999Z"
+    },
+    {
+      "path": "/Users/soybillonario/Visual studio Code insiders/qai-trader/example_signals/EURUSD_BUY_20251107T031533Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-11-07T03:15:33.774399Z"
+    },
+    {
+      "path": "/Users/soybillonario/Visual studio Code insiders/qai-trader/example_signals/EURUSD_BUY_20251107T033109Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-11-07T03:31:09.937986Z"
+    },
+    {
+      "path": "/Users/soybillonario/Visual studio Code insiders/qai-trader/example_signals/EURUSD_BUY_20251107T035435Z.sig.json",
+      "type": "signal",
+      "meta": {
+        "format": "json"
+      },
+      "ts": "2025-11-07T03:54:35.464117Z"
     }
   ],
   "notes": "v0.6.0 objectives completed"

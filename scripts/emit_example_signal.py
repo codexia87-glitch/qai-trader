@@ -25,16 +25,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Emit example signal for MT5 bridge")
     parser.add_argument("--text", action="store_true", help="Emit legacy .sig key=value text file instead of JSON")
     parser.add_argument("--out", type=str, default=None, help="Optional output folder (relative to project root)")
+    parser.add_argument("--symbol", type=str, default="EURUSD", help="Trading symbol (default: EURUSD)")
+    parser.add_argument("--side", type=str, default="BUY", choices=["BUY", "SELL"], help="Order side: BUY or SELL")
+    parser.add_argument("--volume", type=float, default=0.01, help="Lot size (default: 0.01)")
+    parser.add_argument("--sl", type=int, default=40, help="Stop Loss in points (default: 40)")
+    parser.add_argument("--tp", type=int, default=80, help="Take Profit in points (default: 80)")
+    parser.add_argument("--price", type=float, default=None, help="Optional entry price")
     args = parser.parse_args()
 
     out_folder = project_root / (args.out if args.out else "example_signals")
 
     sig = Signal(
-        symbol="EURUSD",
-        side="BUY",
-        volume=0.01,
-        sl_pts=40,
-        tp_pts=80,
+        symbol=args.symbol,
+        side=args.side,
+        volume=args.volume,
+        price=args.price,
+        sl_pts=args.sl,
+        tp_pts=args.tp,
         ts=datetime.utcnow(),
     )
 
